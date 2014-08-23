@@ -7,6 +7,8 @@ class Hero extends Entity {
 	var mx = 0.;
 	var my = 0.;
 	var time = 0.;
+	var pushTime = 0.;
+	var hasMoved = false;
 	public var lock(default,set) = false;
 
 	public var powers : Array<{ p : Power, i : Int }>;
@@ -51,7 +53,7 @@ class Hero extends Entity {
 
 	override function init() {
 		var g = Res.hero.toTile().grid(16);
-		var fcount = [6,5,5,4];
+		var fcount = [6,5,5,4, 1];
 		for( i in 0...g.length ) {
 			g[i].dx = -8;
 			g[i].dy = -16;
@@ -105,8 +107,10 @@ class Hero extends Entity {
 
 		var k = game.keys;
 
-		if( lock )
+		if( lock || dieing ) {
+			mx = my = 0;
 			k = { left : false, right : false, up : false, down : false, action : false };
+		}
 
 		var pow = powers[powers.length - 1].p;
 
@@ -145,13 +149,15 @@ class Hero extends Entity {
 					if( !collide(ix + dir.x, iy + dir.y) ) {
 						powers.pop();
 						var e = new ent.Mob(Pilar, ix + dir.x, iy + dir.y);
+						// single dimention
 					}
 				}
 			case Portal:
 				if( mx == 0 && my == 0 ) {
 					if( !collide(ix + dir.x, iy + dir.y) ) {
 						powers.pop();
-						var e = new Interact(Teleport, ix + dir.x, iy + dir.y);
+						var e = new Interact(Teleport, ix + dir.x, (iy + dir.y) % Const.CH);
+						var e2 = new Interact(Teleport, ix + dir.x, (iy + dir.y) % Const.CH + Const.CH);
 					}
 				}
 			}
@@ -174,8 +180,11 @@ class Hero extends Entity {
 						exit();
 						return;
 					case EInt(Teleport):
-						game.nextWorld();
-						return;
+						if( hasMoved ) {
+							hasMoved = false;
+							game.nextWorld();
+							return;
+						}
 					default:
 					}
 
@@ -183,31 +192,51 @@ class Hero extends Entity {
 				if( !collide(ix - 1, iy) ) {
 					ix--;
 					mx = -1;
-				}
+				} else
+					pushTime += dt;
 				dir = Left;
 			} else if( k.right ) {
 				if( !collide(ix + 1, iy) ) {
 					ix++;
 					mx = 1;
-				}
+				} else
+					pushTime += dt;
 				dir = Right;
 			} else if( k.up ) {
 				if( !collide(ix, iy - 1) ) {
 					iy--;
 					my = -1;
-				}
+				} else
+					pushTime += dt;
 				dir = Up;
 			} else if( k.down ) {
 				if( !collide(ix, iy + 1) ) {
 					iy++;
 					my = 1;
-				}
+				} else
+					pushTime += dt;
 				dir = Down;
-			} else if( !lock )
+			} else if( !lock ) {
+				pushTime = 0;
 				spr.currentFrame = 0;
+			}
 			if( mx != 0 || my != 0 )
 				update(dt);
+			else if( pushTime > 10 ) {
+				pushTime = 0;
+				var e = get(ix + dir.x, iy + dir.y);
+				if( e != null && e.canPush() && !collide(ix + dir.x * 2, iy + dir.y * 2) ) {
+					mx = dir.x;
+					my = dir.y;
+					ix += dir.x;
+					iy += dir.y;
+					e.push(dir);
+					update(dt);
+				}
+			}
 		} else {
+			hasMoved = true;
+			pushTime = 0;
 			if( mx > 0 && k.left && !collide(ix - 1, iy) ) {
 				ix--;
 				mx = -(1 - mx);

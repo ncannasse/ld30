@@ -44,7 +44,7 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 5;
+	public var currentLevel = 6;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
@@ -220,6 +220,16 @@ class Game extends hxd.App {
 			}
 			return false;
 		});
+
+		if( canExit() )
+			for( e in entities )
+				e.wakeUp();
+
+		if( hero.iy >= Const.CH ) {
+			hero.iy -= Const.CH;
+			hero.spr.y -= Const.H;
+			nextWorld();
+		}
 	}
 
 	public function nextWorld() {
@@ -229,12 +239,10 @@ class Game extends hxd.App {
 
 		if( world == 0 ) {
 			root.y = 0;
-			hero.y %= Const.H;
 			hero.spr.y %= Const.H;
 			hero.iy %= Const.CH;
 		} else {
 			root.y -= Const.H;
-			hero.y += Const.H;
 			hero.spr.y += Const.H;
 			hero.iy += Const.CH;
 		}
@@ -264,10 +272,18 @@ class Game extends hxd.App {
 			if( prev.alpha < 0 ) {
 				prev.tile.dispose();
 				prev.remove();
-				if( hero.collide(hero.ix, hero.iy) )
-					hero.die();
-				else
-					hero.lock = false;
+				if( hero.collide(hero.ix, hero.iy) ) {
+					for( e in entities )
+						if( e.isCollide && e.ix == hero.ix && e.iy == hero.iy && e != hero && e.collideWith(hero) && hero.collideWith(e) ) {
+							if( e.telekill() ) {
+								e.die();
+								continue;
+							}
+							hero.die();
+							return true;
+						}
+				}
+				hero.lock = false;
 				return true;
 			}
 			return false;
@@ -348,6 +364,21 @@ class Game extends hxd.App {
 			restart();
 			return;
 		}
+
+		#if debug
+		if( K.isDown(K.F1) )
+			engine.resize(480, 384);
+		if( K.isPressed(K.PGUP) && currentLevel > 0 ) {
+			currentLevel--;
+			restart();
+			return;
+		}
+		if( K.isPressed(K.PGDOWN) && currentLevel < Data.levelData.all.length - 1 ) {
+			currentLevel++;
+			restart();
+			return;
+		}
+		#end
 
 
 		for( e in entities )

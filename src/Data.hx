@@ -19,6 +19,7 @@ enum MobKind {
 	Pilar;	// erase in other worlds
 	Orange;	// appear
 	Bomb;	// explode
+	Dark; 	// pink all worlds
 }
 
 enum IKind {

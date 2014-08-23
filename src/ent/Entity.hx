@@ -6,10 +6,8 @@ class Entity {
 
 	var game : Game;
 	var anims : Array<Array<h2d.Tile>>;
-	var isCollide : Bool;
 	var dieing : Bool;
-	public var x : Float;
-	public var y : Float;
+	public var isCollide : Bool;
 	public var ix : Int;
 	public var iy : Int;
 	public var kind : Data.EntityKind;
@@ -22,8 +20,6 @@ class Entity {
 		kind = k;
 		ix = x;
 		iy = y;
-		this.x = x;
-		this.y = y;
 		spr = new h2d.Anim(null,6);
 		spr.x = (x + 0.5) * 16;
 		spr.y = (y + 1) * 16;
@@ -47,6 +43,18 @@ class Entity {
 			if( e.ix == x && e.iy == y )
 				return e;
 		return null;
+	}
+
+	function getSync() {
+		var other = [];
+		for( e in game.entities )
+			if( e != this && e.ix == ix && e.iy % Const.CH == iy % Const.CH && e.kind.equals(kind) )
+				other.push(e);
+		return other;
+	}
+
+	public function telekill() {
+		return false;
 	}
 
 	public function die() {
@@ -77,6 +85,36 @@ class Entity {
 		});
 	}
 
+	public function canPush() {
+		return false;
+	}
+
+	public function push( dir : hxd.Direction ) {
+		ix += dir.x;
+		iy += dir.y;
+		var mx : Float = dir.x * 16;
+		var my : Float = dir.y * 16;
+		game.waitUntil(function(dt) {
+			var dm = dt * 1.;
+			if( Math.abs(mx) < dm && Math.abs(my) < dm ) {
+				spr.x += mx;
+				spr.y += my;
+				return true;
+			}
+			if( mx < 0 || my < 0 )
+				dm = -dm;
+			if( mx != 0 ) {
+				spr.x += dm;
+				mx -= dm;
+			}
+			if( my != 0 ) {
+				spr.y += dm;
+				my -= dm;
+			}
+			return false;
+		});
+	}
+
 	public function collide( x : Int, y : Int ) {
 		if( x < 0 || y < 0 || x >= Const.CW || y >= game.level.height )
 			return true;
@@ -88,7 +126,7 @@ class Entity {
 		return false;
 	}
 
-	function collideWith( e : Entity ) {
+	public function collideWith( e : Entity ) {
 		return true;
 	}
 

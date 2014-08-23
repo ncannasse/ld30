@@ -22,23 +22,21 @@ class Level {
 		collide = [];
 		for( x in 0...width )
 			collide[x] = [];
-		for( y in 0...Std.int(height / 12) ) {
-			var y = y * 12;
-			for( x in 0...width )
-				collide[x][y] = true;
-			collide[0][y+1] = true;
-			collide[width - 1][y+1] = true;
-		}
 		var tl = Res.tiles.toTile().grid(16);
+		var soil = [];
 		for( l in data.layers ) {
 			var data = l.data.data.decode();
 			var pos = 0;
-			switch( l.name ) {
-			case "objects":
-				for( y in 0...height ) {
-					for( x in 0...width ) {
-						var p = data[pos++] - 17;
-						if( p < 0 ) continue;
+			var t = new h2d.TileGroup(tl[0]);
+			t.colorKey = 0xFF00FF;
+			game.root.add(t, Const.LAYER_BG);
+			var rnd = new hxd.Rand(42);
+			for( y in 0...height ) {
+				for( x in 0...width ) {
+					var p = data[pos++] - 1;
+					if( p < 0 ) continue;
+					if( p > 15 ) {
+						p -= 16;
 						switch( p ) {
 						case 0: new ent.Mob(Tree, x, y);
 						case 1: new ent.Mob(Rock, x, y);
@@ -50,26 +48,22 @@ class Level {
 						case 7: new ent.Interact(Npc, x, y);
 						case 8: new ent.Mob(Orange, x, y);
 						case 9: new ent.Mob(Bomb, x, y);
+						case 10: new ent.Mob(Dark, x, y);
 						}
+						if( soil[x+y*width] )
+							continue;
+						p = 0;
 					}
-				}
-			default:
-				var t = new h2d.TileGroup(tl[0]);
-				t.colorKey = 0xFF00FF;
-				game.root.add(t, Const.LAYER_BG);
-				var rnd = new hxd.Rand(42);
-				for( y in 0...height ) {
-					for( x in 0...width ) {
-						var p = data[pos++] - 1;
-						if( p < 0 ) continue;
-						if( p == 0 ) {
-							rnd.init(x + (y % 12) * 16);
-							if( rnd.random(4) == 0 ) p += rnd.random(3);
-						}
-						t.add(x * 16, y * 16, tl[p]);
+					if( p == 0 ) {
+						rnd.init(x + (y % 12) * 16);
+						if( rnd.random(4) == 0 ) p += rnd.random(3);
 					}
+					if( p >= 3 && p <= 5 ) collide[x][y] = true;
+					soil[x + y * width] = true;
+					t.add(x * 16, y * 16, tl[p]);
 				}
 			}
+			if( t.count() == 0 ) t.remove();
 		}
 	}
 
