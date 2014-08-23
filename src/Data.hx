@@ -9,6 +9,7 @@ class Const {
 
 	public static inline var LAYER_BG = 1;
 	public static inline var LAYER_OBJ = 2;
+	public static inline var LAYER_FX = 2;
 }
 
 enum MobKind {
@@ -17,9 +18,13 @@ enum MobKind {
 	Pink;
 	Heart;
 	Hero;
+	Stairs;
 }
 
 enum EntityKind {
 	EHero;
 	EMob( m : MobKind );
+	EFireball;
 }
+
+typedef Power = LevelData_hearts_power;

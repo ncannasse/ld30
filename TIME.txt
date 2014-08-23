@@ -5,3 +5,6 @@ Day 1
 08:30 			started
 08:30-10:45		first gfxs & hero walk
 10:45-11:10		display & controls
+11:10-12:30		collide, tests render, lunch
+12:30-13:50		fireball + particles
+13:50-14:30		stairs, exit level fx, a bit of logic

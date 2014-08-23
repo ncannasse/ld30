@@ -10,10 +10,20 @@ class Mob extends Entity {
 		super(EMob(k), x, y);
 		switch( k ) {
 		case Heart:
+		case Stairs:
+			spr.visible = false;
 		default:
+			isCollide = true;
 			spr.scaleX = Std.random(2) == 0 ? -1 : 1;
 			spr.onAnimEnd = function() spr.scaleX = -spr.scaleX;
 		}
+	}
+
+
+	override function wakeUp() {
+		spr.speed = 8;
+		spr.currentFrame = Std.random(spr.frames.length);
+		spr.visible = true;
 	}
 
 	override function init() {
@@ -21,7 +31,13 @@ class Mob extends Entity {
 		var tl = [];
 		for( i in 0...4 ) { var t = g[mkind.getIndex() * 16 + i]; t.dx = -8; t.dy = -16; tl.push(t); }
 		anims = [tl];
-		spr.currentFrame = Std.random(4);
+		spr.currentFrame = 1;
+		spr.speed = 0;
+		switch( mkind ) {
+		case Heart, Stairs:
+			game.root.add(spr, Const.LAYER_OBJ - 1);
+		default:
+		}
 	}
 
 }
