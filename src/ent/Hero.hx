@@ -8,14 +8,15 @@ class Hero extends Entity {
 	var mx = 0.;
 	var my = 0.;
 	var time = 0.;
-	var lock = false;
+	public var lock = false;
 
 	public var powers : Array<Power>;
 
 	public function new(x, y) {
 		super(EHero, x, y);
 		game.hero = this;
-		powers = [Nothing, Fire];
+		isCollide = true;
+		powers = [Nothing];
 	}
 
 	override function set_dir(d) {
@@ -44,9 +45,7 @@ class Hero extends Entity {
 			var f = [];
 			for( e in game.entities ) {
 				switch( e.kind ) {
-				case EMob(Stairs):
-				case EMob(h):
-					f.push(e);
+				case EMob(h): f.push(e);
 				default:
 				}
 			}
@@ -56,7 +55,7 @@ class Hero extends Entity {
 					play(2);
 					game.fadeTo(0x10B8E5, 1, function() {
 						game.currentLevel++;
-						game.initLevel();
+						game.restart();
 					});
 				});
 				return;
@@ -64,6 +63,7 @@ class Hero extends Entity {
 
 			var e = f[0];
 
+			game.shake(0.5, 0.2);
 			for( i in 0...30 ) {
 				var a = -Math.PI/2 + Math.srand(Math.PI * 0.4);
 				var sp = (10 + Math.random(5)) * 4;
@@ -98,17 +98,28 @@ class Hero extends Entity {
 			spr.color = null;
 			spr.colorAdd = null;
 		case Fire:
-			spr.colorAdd = new h3d.Vector(Math.abs(Math.sin(time * 0.1)) * 0.2 + 0.2, 0, 0, 0);
+			var k = Math.abs(Math.sin(time * 0.1)) * 0.2 + 0.2;
+			spr.colorAdd = new h3d.Vector(k, 0, 0, 0);
+		case Pilar:
+			var k = 1-Math.abs(Math.sin(time * 0.1)) * 0.5;
+			spr.color = new h3d.Vector(k,k,k,1);
 		}
 
 		if( k.action ) {
 			switch( pow ) {
 			case Nothing:
 			case Fire:
-				//powers.pop();
+				powers.pop();
 				var e = new ent.Fireball(ix, iy, dir);
 				e.spr.x = spr.x + dir.x * 10;
 				e.spr.y = spr.y - 8 + dir.y * 10;
+			case Pilar:
+				if( mx == 0 && my == 0 ) {
+					if( !collide(ix + dir.x, iy + dir.y) ) {
+						powers.pop();
+						var e = new ent.Mob(Pilar, ix + dir.x, iy + dir.y);
+					}
+				}
 			}
 		}
 
@@ -117,12 +128,18 @@ class Hero extends Entity {
 			for( e in game.entities )
 				if( e.ix == ix && e.iy == iy && e != this && !lock )
 					switch( e.kind ) {
-					case EMob(Heart):
+					case EInt(Heart):
 						e.remove();
 						game.nextHeart();
-					case EMob(Stairs):
+					case EInt(Stairs) if( game.hearts == game.level.data.hearts.length ):
 						exit();
 						return;
+					case EInt(Teleport):
+						game.world++;
+						y += Const.H;
+						spr.y += Const.H;
+						iy += Const.CH;
+						game.root.y -= Const.H;
 					default:
 					}
 

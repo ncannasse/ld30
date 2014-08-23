@@ -43,6 +43,7 @@ class Game extends hxd.App {
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
 	public var currentLevel = 0;
+	public var world = 0;
 
 	var parts : h2d.SpriteBatch;
 	var updates : Array < Float -> Bool > ;
@@ -55,6 +56,12 @@ class Game extends hxd.App {
 
 		cache = new h2d.CachedBitmap(s2d.width, s2d.height);
 		s2d.add(cache, 0);
+
+		var bg = new h2d.Bitmap(Res.sky.toTile(), cache);
+		bg.tile.scaleToSize(s2d.width, s2d.height);
+		bg.filter = true;
+		bg.y = -70;
+
 		root = new h2d.Layers(cache);
 
 
@@ -65,6 +72,12 @@ class Game extends hxd.App {
 		initLevel();
 
 
+	}
+
+	public function restart() {
+		world = 0;
+		hearts = 0;
+		initLevel();
 	}
 
 	public function waitUntil(f) {
@@ -92,14 +105,11 @@ class Game extends hxd.App {
 
 		root.add(parts, Const.LAYER_FX);
 
-		var bg = new h2d.Bitmap(Res.sky.toTile(), root);
-		bg.tile.scaleToSize(s2d.width, s2d.height);
-		bg.filter = true;
-		bg.y = -70;
 
 		if( hicons != null ) for( h in hicons ) h.remove();
 
 
+		world = 0;
 		level = new Level(currentLevel);
 
 		hicons = [];
@@ -113,6 +123,18 @@ class Game extends hxd.App {
 			ic.colorKey = 0xFF00FF;
 			hicons.push(ic);
 		}
+	}
+
+	public function shake( amount : Float, time : Float ) {
+		waitUntil(function(dt) {
+			time -= dt / 60;
+			if( time < 0 ) {
+				root.y = -world * Const.H;
+				return true;
+			}
+			root.y = -world * Const.H - amount * 4 * Math.random();
+			return false;
+		});
 	}
 
 	public function fadeTo( color, time : Float, callb ) {
@@ -144,10 +166,9 @@ class Game extends hxd.App {
 	}
 
 	public function nextHeart() {
-		switch( level.data.hearts[hearts].power ) {
-		case Nothing:
-		case Fire:
-		}
+		var p = level.data.hearts[hearts].power;
+		if( p != Nothing )
+			hero.powers.push(p);
 		hicons[hearts].alpha = 1;
 		hearts++;
 		if( hearts == level.data.hearts.length )

@@ -37,14 +37,18 @@ class Entity {
 	}
 
 	function collide( x : Int, y : Int ) {
-		if( x < 0 || y < 0 || x >= Const.CW || y >= Const.CH )
+		if( x < 0 || y < 0 || x >= Const.CW || y >= game.level.height )
 			return true;
 		if( game.level.collide[x][y] )
 			return true;
 		for( e in game.entities )
-			if( e.ix == x && e.iy == y && e.isCollide && e != this )
+			if( e.ix == x && e.iy == y && e.isCollide && e != this && e.collideWith(this) )
 				return true;
 		return false;
+	}
+
+	function collideWith( e : Entity ) {
+		return true;
 	}
 
 	public function remove() {

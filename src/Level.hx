@@ -13,7 +13,7 @@ class Level {
 		this.id = id;
 		data = Data.levelData.all[id];
 		width = Const.CW;
-		height = Const.CH;
+		height = data.height;
 		game = Game.inst;
 		init();
 	}
@@ -22,10 +22,13 @@ class Level {
 		collide = [];
 		for( x in 0...width )
 			collide[x] = [];
-		for( x in 0...width )
-			collide[x][0] = true;
-		collide[0][1] = true;
-		collide[width - 1][1] = true;
+		for( y in 0...Std.int(height / 12) ) {
+			var y = y * 12;
+			for( x in 0...width )
+				collide[x][y] = true;
+			collide[0][y+1] = true;
+			collide[width - 1][y+1] = true;
+		}
 		var tl = Res.tiles.toTile().grid(16);
 		for( l in data.layers ) {
 			var data = l.data.data.decode();
@@ -36,11 +39,14 @@ class Level {
 					for( x in 0...width ) {
 						var p = data[pos++] - 17;
 						if( p < 0 ) continue;
-						switch( MobKind.createByIndex(p) ) {
-						case Hero:
-							new ent.Hero(x, y);
-						case m:
-							new ent.Mob(m, x, y);
+						switch( p ) {
+						case 0: new ent.Mob(Tree, x, y);
+						case 1: new ent.Mob(Rock, x, y);
+						case 2: new ent.Mob(Pink, x, y);
+						case 3: new ent.Interact(Heart, x, y);
+						case 4: new ent.Hero(x, y);
+						case 5: new ent.Interact(Stairs, x, y);
+						case 6: new ent.Interact(Teleport, x, y);
 						}
 					}
 				}
@@ -48,10 +54,15 @@ class Level {
 				var t = new h2d.TileGroup(tl[0]);
 				t.colorKey = 0xFF00FF;
 				game.root.add(t, Const.LAYER_BG);
+				var rnd = new hxd.Rand(42);
 				for( y in 0...height ) {
 					for( x in 0...width ) {
 						var p = data[pos++] - 1;
 						if( p < 0 ) continue;
+						if( p == 0 ) {
+							rnd.init(x + (y % 12) * 16);
+							if( rnd.random(4) == 0 ) p += rnd.random(3);
+						}
 						t.add(x * 16, y * 16, tl[p]);
 					}
 				}
