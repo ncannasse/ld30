@@ -5,8 +5,19 @@ Day 1
 08:30 			started
 08:30-10:45		first gfxs & hero walk
 10:45-11:10		display & controls
-11:10-12:30		collide, tests render, lunch
+11:10-12:00		collide, tests render
+
+12:00-12:30		lunch
+
 12:30-13:50		fireball + particles
 13:50-14:30		stairs, exit level fx, a bit of logic
 14:30-16:00		added interact, pilar, more logic
 16:00-18:00		npc, dialogs, first 4 tuto levels
+18:00-19:15		bomb, one more level
+
+19:15-20:00		diner
+
+20:00-00:00		more levels, more logic
+00:00-01:30		title screen
+
+Work Time = 15:45
