@@ -13,10 +13,12 @@ class Const {
 }
 
 enum MobKind {
-	Tree;
-	Rock;
+	Tree;	// same
+	Rock;	// disapear
 	Pink;
-	Pilar;
+	Pilar;	// erase in other worlds
+	Orange;	// appear
+	Bomb;	// explode
 }
 
 enum IKind {

@@ -9,13 +9,13 @@ class Hero extends Entity {
 	var time = 0.;
 	public var lock(default,set) = false;
 
-	public var powers : Array<Power>;
+	public var powers : Array<{ p : Power, i : Int }>;
 
 	public function new(x, y) {
 		super(EHero, x, y);
 		game.hero = this;
 		isCollide = true;
-		powers = [Nothing];
+		powers = [{ p : Nothing, i : -10 }];
 		spr.alpha = 0;
 		game.waitUntil(function(dt) {
 			spr.alpha += 0.1 * dt;
@@ -25,6 +25,11 @@ class Hero extends Entity {
 			}
 			return false;
 		});
+	}
+
+	override function die() {
+		super.die();
+		lock = true;
 	}
 
 	function set_lock(l) {
@@ -103,7 +108,10 @@ class Hero extends Entity {
 		if( lock )
 			k = { left : false, right : false, up : false, down : false, action : false };
 
-		var pow = powers[powers.length - 1];
+		var pow = powers[powers.length - 1].p;
+
+
+		game.curPower.x = 3 + powers[powers.length - 1].i * 10;
 
 		time += dt;
 		switch( pow ) {
@@ -156,6 +164,11 @@ class Hero extends Entity {
 					switch( e.kind ) {
 					case EInt(Heart):
 						e.remove();
+						for( i in 0...3 ) {
+							var e = get(e.ix, (e.iy % Const.CH) + i * Const.CH);
+							if( e != null && e.kind.match(EInt(Heart)) )
+								e.remove();
+						}
 						game.nextHeart();
 					case EInt(Stairs) if( game.canExit() ):
 						exit();

@@ -18,6 +18,19 @@ class Mob extends Entity {
 		spr.currentFrame = Std.random(spr.frames.length);
 	}
 
+	override function die() {
+		super.die();
+		switch( mkind ) {
+		case Bomb:
+			for( dx in -1...2 )
+				for( dy in -1...2 ) {
+					var e = get(ix + dx, iy + dy);
+					if( e != null && e != this ) e.die() else { var t = new ent.Mob(Tree, ix + dx, iy + dy); t.spr.visible = false; t.isCollide = false; t.die(); }
+				}
+		default:
+		}
+	}
+
 	override function init() {
 		var g = Res.anims.toTile().grid(16);
 		var tl = [];
@@ -27,6 +40,9 @@ class Mob extends Entity {
 		switch( mkind ) {
 		case Pilar:
 			spr.loop = false;
+			for( e in game.entities )
+				if( e.kind.match(EMob(_)) && e != this && e.ix == ix && e.iy % Const.CH == iy )
+					e.remove();
 		default:
 			spr.currentFrame = 1;
 			spr.speed = 0;
@@ -59,6 +75,9 @@ class Mob extends Entity {
 				e.hitHero = true;
 				wait = 1;
 			}
+		case Bomb if( game.canExit() && !dieing ):
+			if( hxd.Math.iabs(game.hero.ix - ix) <= 1 && hxd.Math.iabs(game.hero.iy - iy) <= 1 )
+				die();
 		default:
 		}
 	}

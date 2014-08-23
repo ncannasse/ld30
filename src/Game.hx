@@ -44,8 +44,10 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 0;
+	public var currentLevel = 5;
 	public var world = 0;
+
+	public var curPower : h2d.Anim;
 
 	var parts : h2d.SpriteBatch;
 	var updates : Array < Float -> Bool > ;
@@ -66,6 +68,11 @@ class Game extends hxd.App {
 		bg.tile.scaleToSize(s2d.width, s2d.height);
 		bg.filter = true;
 		bg.y = -70;
+
+		curPower = new h2d.Anim(Res.curPower.toTile().split());
+		curPower.colorKey = 0xFF00FF;
+		s2d.add(curPower, 2);
+		curPower.y = 3;
 
 		root = new h2d.Layers(cache);
 
@@ -216,14 +223,21 @@ class Game extends hxd.App {
 	}
 
 	public function nextWorld() {
-		world++;
+		world = 1 - world;
 		var prev = new h2d.Bitmap(cache.getTile(), s2d);
 		@:privateAccess cache.tile = null;
 
-		root.y -= Const.H;
-		hero.y += Const.H;
-		hero.spr.y += Const.H;
-		hero.iy += Const.CH;
+		if( world == 0 ) {
+			root.y = 0;
+			hero.y %= Const.H;
+			hero.spr.y %= Const.H;
+			hero.iy %= Const.CH;
+		} else {
+			root.y -= Const.H;
+			hero.y += Const.H;
+			hero.spr.y += Const.H;
+			hero.iy += Const.CH;
+		}
 		hero.lock = true;
 
 		switch( world ) {
@@ -232,7 +246,7 @@ class Game extends hxd.App {
 		case 1:
 			var m = h3d.Matrix.I();
 			m.colorHue(-60);
-			m.colorSaturation(0.1);
+			m.colorSaturation(0.2);
 			m.colorContrast(0.4);
 			cache.colorMatrix = m;
 		case 2:
@@ -250,7 +264,10 @@ class Game extends hxd.App {
 			if( prev.alpha < 0 ) {
 				prev.tile.dispose();
 				prev.remove();
-				hero.lock = false;
+				if( hero.collide(hero.ix, hero.iy) )
+					hero.die();
+				else
+					hero.lock = false;
 				return true;
 			}
 			return false;
@@ -309,7 +326,7 @@ class Game extends hxd.App {
 	public function nextHeart() {
 		var p = level.data.hearts[hearts];
 		if( p != null && p.power != Nothing )
-			hero.powers.push(p.power);
+			hero.powers.push({ p : p.power, i : hearts });
 		if( hicons[hearts] != null ) hicons[hearts].alpha = 1;
 		hearts++;
 		if( canExit() )

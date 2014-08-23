@@ -23,6 +23,10 @@ class Fireball extends Entity  {
 		return d;
 	}
 
+	override function collideWith(e:Entity) {
+		return hitHero ? true : e != game.hero;
+	}
+
 	override function init() {
 		anims = [Res.fireball.toTile().split()];
 		for( a in anims[0] ) {
@@ -52,34 +56,8 @@ class Fireball extends Entity  {
 			}
 
 			for( e in game.entities )
-				if( (hitHero ? e == game.hero : e.isCollide) && e.ix == ix && e.iy == iy ) {
-					var m = new h3d.Matrix();
-					var time = 0.;
-					m.identity();
-					e.spr.colorMatrix = m;
-					if( e == game.hero )
-						cast(e, Hero).lock = true;
-					game.waitUntil(function(dt) {
-						time += dt * 0.04;
-						m.identity();
-						m.colorSaturation( Math.max(2-Math.pow(time,3),0) );
-						m.colorBrightness( -time * 0.2 );
-
-						var a = -Math.PI / 2 + Math.srand(Math.PI * 0.4);
-						var sp = (10 + Math.random(5));
-						game.emitPart(Std.random(4), 1, e.spr.x + Math.srand(4), e.spr.y - 8 + Math.srand(4), Math.cos(a) * sp, Math.sin(a) * sp, (0.2 + Math.random(0.2)) * 3);
-
-						if( time > 1 )
-							e.spr.scaleY -= 0.04 * dt;
-						if( e.spr.scaleY < 0 ) {
-							e.remove();
-							if( e == game.hero )
-								game.wait(1.5, function() game.restart());
-							return true;
-						}
-						return false;
-					});
-				}
+				if( (hitHero ? e == game.hero : e.isCollide) && e.ix == ix && e.iy == iy )
+					e.die();
 
 			remove();
 		}

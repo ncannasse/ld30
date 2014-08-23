@@ -48,6 +48,8 @@ class Level {
 						case 5: new ent.Interact(Stairs, x, y);
 						case 6: new ent.Interact(Teleport, x, y);
 						case 7: new ent.Interact(Npc, x, y);
+						case 8: new ent.Mob(Orange, x, y);
+						case 9: new ent.Mob(Bomb, x, y);
 						}
 					}
 				}
