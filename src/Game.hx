@@ -409,6 +409,7 @@ class Game extends hxd.App {
 		hxd.Res.initEmbed();
 		Data.load(Res.data.entry.getBytes().toString());
 		Texts.init();
+		//var title = new Title();
 		inst = new Game();
 	}
 

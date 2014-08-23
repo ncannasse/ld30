@@ -80,7 +80,7 @@ class Hero extends Entity {
 			if( f.length == 0 ) {
 				game.wait(1, function() {
 					play(2);
-					game.fadeTo(0x10B8E5, 1, function() {
+					game.fadeTo(0xA4F50D, 1, function() {
 						game.currentLevel++;
 						game.restart();
 					});
