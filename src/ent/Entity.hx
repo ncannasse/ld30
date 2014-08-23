@@ -36,6 +36,10 @@ class Entity {
 	public function wakeUp() {
 	}
 
+	public function activate() {
+		return false;
+	}
+
 	function collide( x : Int, y : Int ) {
 		if( x < 0 || y < 0 || x >= Const.CW || y >= game.level.height )
 			return true;

@@ -47,6 +47,7 @@ class Level {
 						case 4: new ent.Hero(x, y);
 						case 5: new ent.Interact(Stairs, x, y);
 						case 6: new ent.Interact(Teleport, x, y);
+						case 7: new ent.Interact(Npc, x, y);
 						}
 					}
 				}

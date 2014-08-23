@@ -9,3 +9,4 @@ Day 1
 12:30-13:50		fireball + particles
 13:50-14:30		stairs, exit level fx, a bit of logic
 14:30-16:00		added interact, pilar, more logic
+16:00-18:00		npc, dialogs, first 4 tuto levels

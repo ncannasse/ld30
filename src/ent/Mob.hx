@@ -40,8 +40,20 @@ class Mob extends Entity {
 		if( wait > 0 ) return;
 		switch( mkind ) {
 		case Pink:
+			if( !game.canExit() ) spr.speed = 0;
 			if( !game.hero.lock && (game.hero.ix == ix || game.hero.iy == iy) ) {
 				var d = hxd.Direction.from(game.hero.ix - ix, game.hero.iy - iy);
+
+				var px = ix + d.x, py = iy + d.y;
+				while( px != game.hero.ix || py != game.hero.iy ) {
+					if( collide(px, py) ) {
+						spr.speed = 6;
+						return;
+					}
+					px += d.x;
+					py += d.y;
+				}
+
 				var e = new Fireball(ix + d.x, iy + d.y, d);
 				e.spr.y -= 8;
 				e.hitHero = true;

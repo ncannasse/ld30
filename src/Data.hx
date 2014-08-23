@@ -23,6 +23,7 @@ enum IKind {
 	Heart;
 	Stairs;
 	Teleport;
+	Npc;
 }
 
 enum EntityKind {

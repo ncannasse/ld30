@@ -1,6 +1,5 @@
 package ent;
 import Data;
-import hxd.Key in K;
 import hxd.Math;
 
 class Hero extends Entity {
@@ -8,7 +7,7 @@ class Hero extends Entity {
 	var mx = 0.;
 	var my = 0.;
 	var time = 0.;
-	public var lock = false;
+	public var lock(default,set) = false;
 
 	public var powers : Array<Power>;
 
@@ -17,6 +16,25 @@ class Hero extends Entity {
 		game.hero = this;
 		isCollide = true;
 		powers = [Nothing];
+		spr.alpha = 0;
+		game.waitUntil(function(dt) {
+			spr.alpha += 0.1 * dt;
+			if( spr.alpha > 1 ) {
+				spr.alpha = 1;
+				return true;
+			}
+			return false;
+		});
+	}
+
+	function set_lock(l) {
+		if( l ) {
+			spr.speed = 0;
+			spr.currentFrame = 0;
+		} else {
+			spr.speed = 12;
+		}
+		return lock = l;
 	}
 
 	override function set_dir(d) {
@@ -45,7 +63,9 @@ class Hero extends Entity {
 			var f = [];
 			for( e in game.entities ) {
 				switch( e.kind ) {
-				case EMob(h): f.push(e);
+				case EMob(h):
+					if( Std.int(e.iy/Const.CH) == Std.int(iy/Const.CH) )
+						f.push(e);
 				default:
 				}
 			}
@@ -78,17 +98,10 @@ class Hero extends Entity {
 
 	override function update(dt:Float) {
 
-		var k = {
-			left : K.isDown(K.LEFT) || K.isDown("Q".code) || K.isDown("A".code),
-			right : K.isDown(K.RIGHT) || K.isDown("D".code),
-			up : K.isDown(K.UP) || K.isDown("Z".code) || K.isDown("W".code),
-			down : K.isDown(K.DOWN) || K.isDown("S".code),
-			action : K.isPressed(K.SPACE) || K.isPressed("E".code),
-		};
+		var k = game.keys;
 
-		if( lock ) {
-			k.left = k.right = k.up = k.down = k.action = false;
-		}
+		if( lock )
+			k = { left : false, right : false, up : false, down : false, action : false };
 
 		var pow = powers[powers.length - 1];
 
@@ -97,15 +110,21 @@ class Hero extends Entity {
 		case Nothing:
 			spr.color = null;
 			spr.colorAdd = null;
-		case Fire:
-			var k = Math.abs(Math.sin(time * 0.1)) * 0.2 + 0.2;
-			spr.colorAdd = new h3d.Vector(k, 0, 0, 0);
-		case Pilar:
+		default:
 			var k = 1-Math.abs(Math.sin(time * 0.1)) * 0.5;
 			spr.color = new h3d.Vector(k,k,k,1);
 		}
 
 		if( k.action ) {
+
+			for( e in game.entities )
+				if( e.isCollide && e.ix == ix + dir.x && e.iy == iy + dir.y && e.activate() ) {
+					lock = true;
+					spr.currentFrame = 0;
+					spr.speed = 0;
+					return;
+				}
+
 			switch( pow ) {
 			case Nothing:
 			case Fire:
@@ -120,6 +139,13 @@ class Hero extends Entity {
 						var e = new ent.Mob(Pilar, ix + dir.x, iy + dir.y);
 					}
 				}
+			case Portal:
+				if( mx == 0 && my == 0 ) {
+					if( !collide(ix + dir.x, iy + dir.y) ) {
+						powers.pop();
+						var e = new Interact(Teleport, ix + dir.x, iy + dir.y);
+					}
+				}
 			}
 		}
 
@@ -131,15 +157,12 @@ class Hero extends Entity {
 					case EInt(Heart):
 						e.remove();
 						game.nextHeart();
-					case EInt(Stairs) if( game.hearts == game.level.data.hearts.length ):
+					case EInt(Stairs) if( game.canExit() ):
 						exit();
 						return;
 					case EInt(Teleport):
-						game.world++;
-						y += Const.H;
-						spr.y += Const.H;
-						iy += Const.CH;
-						game.root.y -= Const.H;
+						game.nextWorld();
+						return;
 					default:
 					}
 
@@ -175,18 +198,22 @@ class Hero extends Entity {
 			if( mx > 0 && k.left && !collide(ix - 1, iy) ) {
 				ix--;
 				mx = -(1 - mx);
+				dir = Left;
 			}
 			if( mx < 0 && k.right && !collide(ix + 1, iy) ) {
 				ix++;
 				mx = 1 + mx;
+				dir = Right;
 			}
 			if( my > 0 && k.up && !collide(ix, iy - 1) ) {
 				iy--;
 				my = -(1 - my);
+				dir = Up;
 			}
 			if( my < 0 && k.down && !collide(ix, iy + 1) ) {
 				iy++;
 				my = 1 + my;
+				dir = Down;
 			}
 
 			var ds = 0.06 * dt;
