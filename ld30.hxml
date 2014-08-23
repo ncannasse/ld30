@@ -1,0 +1,8 @@
+-cp src
+-swf ld30.swf
+-swf-header 720:576:60:FFFFFF
+-swf-version 11.8
+-main Game
+-lib h3d
+-lib castle
+-dce full

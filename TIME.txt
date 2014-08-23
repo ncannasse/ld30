@@ -1,0 +1,7 @@
+
+Day 1
+-----
+
+08:30 			started
+08:30-10:45		first gfxs & hero walk
+10:45-11:10		display & controls

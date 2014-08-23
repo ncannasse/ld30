@@ -1,0 +1,104 @@
+{
+	"sheets": [
+		{
+			"name": "levelData",
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "width"
+				},
+				{
+					"typeStr": "3",
+					"name": "height",
+					"display": null
+				},
+				{
+					"typeStr": "8",
+					"name": "layers",
+					"display": null
+				},
+				{
+					"typeStr": "16",
+					"name": "props"
+				}
+			],
+			"lines": [
+				{
+					"width": 15,
+					"height": 12,
+					"layers": [
+						{
+							"name": "bg",
+							"data": {
+								"file": "tiles.png",
+								"size": 16,
+								"stride": 16,
+								"data": "AAAGAAYABgAGAAYABgAGAAYABgAGAAYABgAGAAAABAABAAIAAQADAAEAAQABAAEAAQABAAIAAQADAAUAAgABAAMAAgABAAEAAQADAAIAAQACAAIAAQACAAMAAwACAAMAAQABAAEAAwABAAEAAQABAAIAAwADAAEAAQADAAEAAgABAAEAAQABAAEAAQABAAEAAQABAAEAAQACAAEAAgABAAEAAQABAAMAAQABAAEAAwACAAEAAQADAAEAAQABAAEAAwADAAEAAQABAAEAAQABAAEAAQADAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQACAAIAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAgABAAEAAQADAAEAAQACAAMAAQADAAEAAQACAAEAAQADAAEAAQABAAEAAQADAAIAAQABAAEAAQABAAEAAQABAAEAAQADAAEAAQADAAIAAQABAAEAAQABAAEA"
+							}
+						},
+						{
+							"name": "objects",
+							"data": {
+								"file": "tiles.png",
+								"size": 16,
+								"stride": 16,
+								"data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAEQAAAAAAAAAAAAAAAAATABMAAAAAAAAAAAAAABEAEQAAAAAAAAAAAAAAAAATABMAAAAAAAAAAAAAABEAEQAAAAAAEgASAAAAAAAAAAAAAAARABEAAAAAABEAEQAAAAAAEgASAAAAFAAAAAAAAAARABEAAAAAABEAEQAAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAABEAEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAEQARABEAEQARABEAEQARABEAEQARABEAEQARABEA"
+							}
+						}
+					],
+					"props": {
+						"tileSize": 16,
+						"layers": [
+							{
+								"l": "bg",
+								"p": {
+									"alpha": 1
+								}
+							},
+							{
+								"l": "objects",
+								"p": {
+									"alpha": 1
+								}
+							}
+						]
+					}
+				}
+			],
+			"separators": [],
+			"props": {
+				"level": {
+					"tileSets": {
+						"tiles.png": {
+							"stride": 16,
+							"sets": [],
+							"props": []
+						}
+					}
+				}
+			}
+		},
+		{
+			"name": "levelData@layers",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "1",
+					"name": "name",
+					"display": null
+				},
+				{
+					"typeStr": "15",
+					"name": "data",
+					"display": null
+				}
+			]
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}
