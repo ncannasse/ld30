@@ -1,0 +1,6 @@
+
+#A=<cc l8 fga l4 rcc l8 fge l4 r> <cc l8 fgar l4 q1 cfgacfg e> q0 l4 r;
+
+#B=<cc l8 ded l4 rcc l8 de>b<> l4 r <cc l8 dedr l4 q1 cdedcder16 >b<> q0 l4 r;
+
+$2 q0 t200 AB<AB>;
