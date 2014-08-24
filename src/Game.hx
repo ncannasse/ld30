@@ -485,11 +485,14 @@ class Game extends hxd.App {
 		MUSIC = new flash.media.Sound(new flash.net.URLRequest("music.mp3"));
 		CHANNEL = MUSIC.play(0,9999999);
 
-		hxd.Res.initEmbed();
+		hxd.Res.loader = new hxd.res.Loader(hxd.res.EmbedFileSystem.create(null,{ compressSounds : true }));
 		Data.load(Res.data.entry.getBytes().toString());
 		Texts.init();
-		//var title = new Title();
+		#if debug
 		inst = new Game();
+		#else
+		var title = new Title();
+		#end
 	}
 
 }

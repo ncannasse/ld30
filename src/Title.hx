@@ -55,6 +55,12 @@ class Title extends hxd.App {
 				birds.remove(b);
 			}
 		}
+		if( Math.random() * dt < 0.1 ) {
+			if( Std.random(3) == 0 )
+				Res.sfx.bird2.play();
+			else
+				Res.sfx.bird1.play();
+		}
 
 
 		if( scroll.y < -(tower.tile.height - s2d.height) ) {
