@@ -90,7 +90,7 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 14;
+	public var currentLevel = 15;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
@@ -332,6 +332,10 @@ class Game extends hxd.App {
 						}
 				}
 				hero.lock = false;
+				for( e in entities ) {
+					if( e != hero ) e.update(0);
+					e.checkHero();
+				}
 				return true;
 			}
 			return false;

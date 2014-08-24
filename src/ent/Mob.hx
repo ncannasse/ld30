@@ -175,6 +175,8 @@ class Mob extends Entity {
 				wait = 1;
 			}
 		case Dark:
+
+
 			if( !game.canExit() ) spr.speed = 0;
 			canFire = false;
 			if( !game.hero.lock && (game.hero.ix == ix || game.hero.iy == iy) ) {
@@ -196,6 +198,7 @@ class Mob extends Entity {
 
 				canFire = true;
 			}
+
 
 			for( s in game.splits )
 				if( s.inZone(this) && !dieing )
