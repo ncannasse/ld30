@@ -106,7 +106,7 @@ class Mob extends Entity {
 		case Pilar:
 			spr.loop = false;
 			for( e in game.entities )
-				if( e.kind.match(EMob(_)) && e != this && e.ix == ix && e.iy % Const.CH == iy )
+				if( e.kind.match(EMob(_)) && e != this && e.ix == ix && e.iy % Const.CH == iy % Const.CH )
 					e.remove();
 		default:
 			spr.currentFrame = 1;
@@ -134,7 +134,7 @@ class Mob extends Entity {
 					py += d.y;
 				}
 
-				if( game.world != 0 || @:privateAccess hxd.Math.abs(game.hero.mx + game.hero.my) > 0.2 ) {
+				if( game.world != 0 ) {
 					spr.speed = 6;
 					return;
 				}

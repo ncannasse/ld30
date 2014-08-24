@@ -32,7 +32,7 @@ class Interact extends Entity {
 			case 0:
 				"Hello young Selenite, did you fall from the moon?
 				#I haven't seen any of your kind for a long time...
-				#If you want to return to your home, you'll have to climb the Jeru Tower.
+				#If you want to return to your home, you'll have to climb Jeru's Tower.
 				#Get all the hearts to unlock the stairs to the next floor.
 				#Good luck!
 				";
@@ -42,22 +42,26 @@ class Interact extends Entity {
 				#If you are stuck, use the \"Escape\" magic word to try again.
 				";
 			case 2:
-				"Some monsters will attack you even while they're asleep.
+				"Jeru's Tower is populated by many different moobs.
+				#Some of them will attack you even while they're asleep.
 				#Use the Pilar Invocation power to protect yourself.";
 			case 3:
-				"The Jeru Tower lives at the crossroad of multiple connected worlds.
+				"Jeru's Tower lives at the crossroad of multiple connected worlds.
 				#The Selenites such as you can sometimes open portals between these worlds.
-				#They are the same, and still different.
+				#Theses worlds are similar, but different rules apply between them.
 				";
 			case 4:
-				"The Pilar can prevent things from appearing in other worlds.";
-			case 5:
-				"The Bomb will only explode if you are near and if all the hearts have been taken.";
+				"The Pilar can destroy things in other worlds.";
 			case 6:
-				"When changing worlds, the pink monsters will lose their powers and can be pushed.";
+				"The Boombo will only explode if you are near and if all the hearts have been taken.
+				#Some moobs can be pushed were you're into the Grey World.";
 			case 7:
-				"The Dark One is the most dangerous... It can even reach you through Plantustics!";
+				"Into the Grey World, Pinkies moobs will lose their powers and can be pushed.";
 			case 8:
+				"Using your powers in the right order is the first step to reach your goal in life.";
+			case 9:
+				"The Dark One is the most dangerous... It can even reach you through Plantustics!";
+			case 10:
 				"Did you ever try to push some monsters trough a Portal?
 				#I wonder what could happen with some of them...";
 			default: "TODO:" + [game.currentLevel, game.world];
