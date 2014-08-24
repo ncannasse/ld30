@@ -177,6 +177,12 @@ class Mob extends Entity {
 		case Dark:
 
 
+			for( s in game.splits )
+				if( s.inZone(this) && !dieing ) {
+					die();
+					return;
+				}
+
 			if( !game.canExit() ) spr.speed = 0;
 			canFire = false;
 			if( !game.hero.lock && (game.hero.ix == ix || game.hero.iy == iy) ) {
@@ -200,9 +206,6 @@ class Mob extends Entity {
 			}
 
 
-			for( s in game.splits )
-				if( s.inZone(this) && !dieing )
-					die();
 
 		case Bomb:
 			if( hxd.Math.iabs(game.hero.ix - ix) <= 1 && hxd.Math.iabs(game.hero.iy - iy) <= 1 ) {
