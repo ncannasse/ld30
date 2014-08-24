@@ -276,7 +276,7 @@ class Game extends hxd.App {
 
 
 		var t = new h2d.Text(Res.font.toFont(), s2d);
-		t.text = "Floor #" + StringTools.lpad("" + (currentLevel + 1), "0", 2);
+		t.text = "Floor #" + StringTools.lpad("" + (currentLevel + 1), "0", 2) + "/"+Data.levelData.all.length;
 		t.x = (s2d.width - t.textWidth) >> 1;
 		t.y = s2d.height - 60;
 		t.dropShadow = { dx : 1, dy : 1, color : 0, alpha : 0.4 };

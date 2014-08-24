@@ -158,9 +158,9 @@ class Title extends hxd.App {
 					};
 
 					var copy = new h2d.Text(Res.font.toFont(), s2d);
-					copy.scale(0.5);
-					copy.text = "(C)2014 NCA";
-					copy.dropShadow = { dx : 1, dy : 1, color : 0, alpha : 0.6 };
+					copy.scale(0.75);
+					copy.text = "(C)2014 @ncannasse";
+					copy.dropShadow = { dx : 1, dy : 1, color : 0, alpha : 0.2 };
 					copy.x = 2;
 					copy.filter = true;
 					copy.y = s2d.height - 2 - (copy.textHeight >> 1);
