@@ -221,6 +221,23 @@ class Game extends hxd.App {
 
 	public function initLevel() {
 
+		if( hicons != null && CHANNEL.position > 31000 ) {
+			// restart sound from start
+			var old = CHANNEL;
+			var t = new haxe.Timer(20);
+			var volume = 1.;
+			t.run = function() {
+				volume -= 0.1;
+				if( volume < 0 ) {
+					old.stop();
+					t.stop();
+					return;
+				}
+				old.soundTransform = new flash.media.SoundTransform(volume);
+			};
+			CHANNEL = MUSIC.play(31000, 9999);
+		}
+
 		for( e in entities.copy() )
 			e.remove();
 
@@ -456,8 +473,14 @@ class Game extends hxd.App {
 	}
 
 	public static var inst : Game;
+	static var MUSIC : flash.media.Sound;
+	static var CHANNEL : flash.media.SoundChannel;
 
 	static function main() {
+
+		MUSIC = new flash.media.Sound(new flash.net.URLRequest("music.mp3"));
+		CHANNEL = MUSIC.play(0,9999999);
+
 		hxd.Res.initEmbed();
 		Data.load(Res.data.entry.getBytes().toString());
 		Texts.init();
