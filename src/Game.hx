@@ -90,7 +90,7 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 9;
+	public var currentLevel = 0;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
@@ -220,6 +220,11 @@ class Game extends hxd.App {
 	}
 
 	public function initLevel() {
+
+		if( currentLevel >= Data.levelData.all.length ) {
+			new Title(engine).endGame();
+			return;
+		}
 
 		if( hicons != null && CHANNEL.position > 31000 ) {
 			// restart sound from start

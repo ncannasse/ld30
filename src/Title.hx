@@ -13,6 +13,8 @@ class Title extends hxd.App {
 	var time : Float = 0;
 	var start : h2d.Text;
 
+	var finish : Bool;
+
 
 	override function init() {
 		birds = [];
@@ -23,15 +25,60 @@ class Title extends hxd.App {
 		tower = new h2d.Bitmap(Res.titleTower.toTile());
 		tower.colorKey = 0x10b8e5;
 		scroll.add(tower, 1);
+		if( finish ) endGame();
+	}
+
+	public function endGame() {
+		finish = true;
+		if( birds != null ) {
+			title = new h2d.Bitmap();
+			titleFront = title;
+			scroll.y = -(tower.tile.height - s2d.height);
+		}
 	}
 
 	override function update(dt:Float) {
 		if( title == null )
 			scroll.y -= 1 * dt;
 		else
-			scroll.y += (-scroll.y / 400) * dt;
+			scroll.y += (finish ? 0.5 : -scroll.y / 400) * dt;
 
-		if( scroll.y > 0 ) scroll.y = 0;
+		if( scroll.y > 0 ) {
+			scroll.y = 0;
+			if( finish && hero == null ) {
+				hero = new h2d.Anim(Res.hero.toTile().sub(0, 0, 6 * 16, 16).split(), 12, s2d);
+				hero.y = 27;
+				hero.x = 125;
+				hero.scale(0.5);
+				hero.color = new h3d.Vector(0, 0, 0, 0);
+				hero.colorKey = 0xA4F50D;
+			}
+		}
+
+		if( hero != null && finish ) {
+			if( hero.x > 92 ) {
+				hero.x -= 0.1 * dt;
+				if( hero.x <= 92 ) {
+					hero.x = 92;
+					hero.play(Res.hero.toTile().sub(0, 32, 5 * 16, 16).split());
+				}
+			} else if( hero.y > -10 ) {
+				hero.y -= 0.1 * dt;
+				if( hero.y <= -10 ) {
+
+					var end = new h2d.Text(Res.font.toFont(), s2d);
+					end.textAlign = Center;
+					end.text = "Made in 48h for Lumdum Dare 30\nby @ncannasse\nThank you for playing!";
+					end.x = (s2d.width - end.textWidth) >> 1;
+					end.y = 120;
+					end.dropShadow = { dx : 1, dy : 1, color : 0, alpha : 0.6 };
+
+				}
+			}
+			var c = hero.color.x + dt * 0.01;
+			if( c > 1 ) c = 1;
+			hero.color.set(c, c, c, c);
+		}
 
 		if( Math.random() < 0.06 ) {
 			var b = new h2d.Anim(Res.bird.toTile().split(), 6 + Math.random() * 6, scroll);
@@ -74,7 +121,7 @@ class Title extends hxd.App {
 				hero.x = 150;
 			}
 		}
-		if( hero != null ) {
+		if( hero != null && !finish ) {
 			hero.y -= dt * 0.2;
 			if( hero.y < s2d.height - 25 ) {
 				hero.y += dt * 0.15;
