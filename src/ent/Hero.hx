@@ -115,7 +115,8 @@ class Hero extends Entity {
 		var pow = powers[powers.length - 1].p;
 
 
-		game.curPower.x = 3 + powers[powers.length - 1].i * 10;
+		game.curPower.x = 3 + powers[powers.length - 1].i * 12;
+		game.curPower.visible = Std.int(time / 15) & 1 == 0;
 
 		time += dt;
 		switch( pow ) {

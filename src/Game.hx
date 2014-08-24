@@ -245,8 +245,8 @@ class Game extends hxd.App {
 		for( i in 0...hp.length ) {
 			var ic = new h2d.Bitmap(icons[hp[i].power.toInt()]);
 			s2d.add(ic, 1);
-			ic.x = 4 + i * 10;
-			ic.y = 4;
+			ic.x = 3 + i * 12;
+			ic.y = 3;
 			ic.alpha = 0.4;
 			ic.colorKey = 0xFF00FF;
 			hicons.push(ic);
