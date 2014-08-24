@@ -9,6 +9,7 @@ class Fireball extends Entity  {
 	public function new(x,y,dir) {
 		super(EFireball, x, y);
 		this.dir = dir;
+		Res.sfx.fireball.play();
 	}
 
 	override function set_dir(d) {
@@ -47,6 +48,8 @@ class Fireball extends Entity  {
 		game.emitPart(Std.random(5), 0, spr.x + Math.srand(4), spr.y + Math.srand(4), Math.cos(a) * sp, Math.sin(a) * sp, 0.5);
 		if( collide(ix, iy) ) {
 
+			Res.sfx.firekill.play();
+
 			game.shake(0.5, 0.2);
 
 			for( i in 0...30 ) {
@@ -56,8 +59,10 @@ class Fireball extends Entity  {
 			}
 
 			for( e in game.entities )
-				if( (hitHero ? e == game.hero : e.isCollide) && e.ix == ix && e.iy == iy )
+				if( (hitHero ? e == game.hero : e.isCollide) && e.ix == ix && e.iy == iy ) {
+					Res.sfx.burning.play();
 					e.die();
+				}
 
 			remove();
 		}

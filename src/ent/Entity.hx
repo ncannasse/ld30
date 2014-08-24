@@ -85,7 +85,7 @@ class Entity {
 			if( spr.scaleY < 0 ) {
 				remove();
 				if( this == game.hero )
-					game.wait(1.5, function() game.restart());
+					game.wait(1.5, function() { Res.sfx.piou2.play(); game.restart(); });
 				return true;
 			}
 			return false;

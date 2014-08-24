@@ -30,6 +30,8 @@ class Mob extends Entity {
 
 		switch( mkind ) {
 		case Bomb:
+			Res.sfx.bomb.play();
+			Res.sfx.burning.play();
 			for( dx in -1...2 )
 				for( dy in -1...2 ) {
 					if( dx == 0 && dy == 0 ) continue;
@@ -128,6 +130,7 @@ class Mob extends Entity {
 	override function checkHero() {
 		switch( mkind ) {
 		case Dark if( canFire ):
+			Res.sfx.dark.play();
 			game.hero.lock = true;
 			game.hero.play(4);
 			var px = spr.x, py = spr.y - 8;
@@ -135,8 +138,10 @@ class Mob extends Entity {
 			game.waitUntil(function(dt) {
 				px += d.x * dt * 2;
 				py += d.y * dt * 2;
+				if( Math.random() < 0.2 * dt ) Res.sfx.die2.play();
 				game.emitPart(Std.random(3), 1, px + hxd.Math.srand(4), py + hxd.Math.srand(4) - 4, hxd.Math.srand(4), (1 + hxd.Math.random()) * 2.5, 1 + hxd.Math.random() * 2);
 				if( Std.int(px / 16) == game.hero.ix && Std.int(py / 16) == game.hero.iy ) {
+					Res.sfx.burning.play();
 					game.hero.die();
 					return true;
 				}
@@ -179,6 +184,7 @@ class Mob extends Entity {
 
 			for( s in game.splits )
 				if( s.inZone(this) && !dieing ) {
+					Res.sfx.darkdie.play();
 					die();
 					return;
 				}

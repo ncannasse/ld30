@@ -55,7 +55,11 @@ class Split extends Mob {
 	override function checkHero() {
 		if( inZone(game.hero) ) {
 			moves--;
-			if( moves == 0 ) game.hero.die();
+			if( moves == 0 ) {
+				Res.sfx.splitKill.play();
+				game.hero.die();
+			} else
+				Res.sfx.split.play();
 		}
 	}
 

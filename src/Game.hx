@@ -90,7 +90,7 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 18;
+	public var currentLevel = 9;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
@@ -410,8 +410,11 @@ class Game extends hxd.App {
 
 	public function nextHeart() {
 		var p = level.data.hearts[hearts];
-		if( p != null && p.power != Nothing )
-			hero.powers.push({ p : p.power, i : hearts });
+		if( p != null && p.power != Nothing ) {
+			hero.powers.push( { p : p.power, i : hearts } );
+			Res.sfx.powa.play();
+		} else
+			Res.sfx.heart.play();
 		if( hicons[hearts] != null ) hicons[hearts].alpha = 1;
 		hearts++;
 		if( canExit() )
@@ -430,6 +433,7 @@ class Game extends hxd.App {
 		};
 
 		if( K.isPressed(K.ESCAPE) ) {
+			Res.sfx.piou.play();
 			restart();
 			return;
 		}

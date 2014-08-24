@@ -80,7 +80,14 @@ class Hero extends Entity {
 			if( f.length == 0 ) {
 				game.wait(1, function() {
 					play(2);
+					Res.sfx.climb.play();
 					game.fadeTo(0xA4F50D, 1, function() {
+						// prevent music reset
+						@:privateAccess  {
+							for( h in game.hicons )
+								h.remove();
+							game.hicons = null;
+						};
 						game.currentLevel++;
 						game.restart();
 					});
@@ -96,6 +103,7 @@ class Hero extends Entity {
 				var sp = (10 + Math.random(5)) * 4;
 				game.emitPart(Std.random(5), 1, e.spr.x + Math.srand(4), e.spr.y - 8 + Math.srand(4), Math.cos(a) * sp, Math.sin(a) * sp, 0.2 + Math.random(0.2));
 			}
+			Res.sfx.die2.play();
 
 			e.remove();
 			game.wait(0.05, next);
@@ -140,6 +148,7 @@ class Hero extends Entity {
 
 			switch( pow ) {
 			case Nothing:
+				Res.sfx.nopowa.play();
 			case Fire:
 				powers.pop();
 				var e = new ent.Fireball(ix, iy, dir);
@@ -150,8 +159,10 @@ class Hero extends Entity {
 					if( !collide(ix + dir.x, iy + dir.y) ) {
 						powers.pop();
 						var e = new ent.Mob(Pilar, ix + dir.x, iy + dir.y);
+						Res.sfx.pilar.play();
 						// single dimention
-					}
+					} else
+						Res.sfx.nopowa.play();
 				}
 			case Portal:
 				if( mx == 0 && my == 0 ) {
@@ -159,7 +170,9 @@ class Hero extends Entity {
 						powers.pop();
 						var e = new Interact(Teleport, ix + dir.x, (iy + dir.y) % Const.CH);
 						var e2 = new Interact(Teleport, ix + dir.x, (iy + dir.y) % Const.CH + Const.CH);
-					}
+						Res.sfx.portal.play();
+					}  else
+						Res.sfx.nopowa.play();
 				}
 			case Rotate:
 				if( mx == 0 && my == 0 ) {
@@ -167,7 +180,8 @@ class Hero extends Entity {
 					if( e != null && e.canTurn() ) {
 						powers.pop();
 						e.dir = hxd.Direction.from( e.dir.y, -e.dir.x);
-					}
+					} else
+						Res.sfx.nopowa.play();
 				}
 			}
 		}
@@ -182,6 +196,7 @@ class Hero extends Entity {
 						return;
 					case EInt(Teleport):
 						if( hasMoved ) {
+							Res.sfx.teleport.play();
 							hasMoved = false;
 							game.nextWorld();
 							return;
@@ -233,6 +248,7 @@ class Hero extends Entity {
 					ix += dir.x;
 					iy += dir.y;
 					e.push(dir);
+					Res.sfx.push.play();
 					update(dt);
 				}
 			}
