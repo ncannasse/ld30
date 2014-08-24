@@ -90,7 +90,7 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 11;
+	public var currentLevel = 14;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;

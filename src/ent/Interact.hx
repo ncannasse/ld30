@@ -96,6 +96,9 @@ class Interact extends Entity {
 			case Telekill:
 				"Did you ever try to push some monsters trough a Portal?
 				#I wonder what could happen with some of them...";
+			case DoubleSplit:
+				"Killing moobs with fireballs while you're in the Pink World is acting cowardly.
+				#On the other hand it's a lot of fun.";
 			default:
 				"TODO:" + game.level.data.id;
 			}
