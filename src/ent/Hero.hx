@@ -154,10 +154,18 @@ class Hero extends Entity {
 				}
 			case Portal:
 				if( mx == 0 && my == 0 ) {
-					if( !collide(ix + dir.x, iy + dir.y) ) {
+					if( !collide(ix + dir.x, iy + dir.y) && get(ix+dir.x,iy+dir.y) == null ) {
 						powers.pop();
 						var e = new Interact(Teleport, ix + dir.x, (iy + dir.y) % Const.CH);
 						var e2 = new Interact(Teleport, ix + dir.x, (iy + dir.y) % Const.CH + Const.CH);
+					}
+				}
+			case Rotate:
+				if( mx == 0 && my == 0 ) {
+					var e = get(ix + dir.x, iy + dir.y);
+					if( e != null && e.canTurn() ) {
+						powers.pop();
+						e.dir = hxd.Direction.from( e.dir.y, -e.dir.x);
 					}
 				}
 			}
@@ -278,6 +286,14 @@ class Hero extends Entity {
 				var dm = ds > -my ? my : -ds;
 				spr.y += dm * 16;
 				my -= dm;
+			}
+
+			if( mx == 0 && my == 0 ) {
+				for( s in game.splits )
+					if( s.inZone(this) ) {
+						s.moves--;
+						if( s.moves == 0 ) this.die();
+					}
 			}
 		}
 	}

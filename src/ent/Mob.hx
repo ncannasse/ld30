@@ -40,7 +40,7 @@ class Mob extends Entity {
 						t.die();
 						continue;
 					}
-					if( e == this || e.dieing ) continue;
+					if( e == this || e.dieing || e.isHidden() ) continue;
 					e.die();
 				}
 		default:
@@ -134,7 +134,7 @@ class Mob extends Entity {
 					py += d.y;
 				}
 
-				if( game.world != 0 ) {
+				if( game.world != 0 || game.hero.isHidden() ) {
 					spr.speed = 6;
 					return;
 				}
@@ -158,7 +158,7 @@ class Mob extends Entity {
 					py += d.y;
 				}
 
-				if( @:privateAccess hxd.Math.abs(game.hero.mx + game.hero.my) > 0.2 ) {
+				if( @:privateAccess hxd.Math.abs(game.hero.mx + game.hero.my) > 0.2 || game.hero.isHidden() ) {
 					spr.speed = 10;
 					return;
 				}
@@ -177,6 +177,11 @@ class Mob extends Entity {
 					return false;
 				});
 			}
+
+			for( s in game.splits )
+				if( s.inZone(this) && !dieing )
+					die();
+
 		case Bomb:
 			if( hxd.Math.iabs(game.hero.ix - ix) <= 1 && hxd.Math.iabs(game.hero.iy - iy) <= 1 ) {
 				if( game.canExit() && !dieing )

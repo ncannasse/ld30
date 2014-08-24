@@ -31,6 +31,13 @@ class Entity {
 		game.entities.push(this);
 	}
 
+	public function isHidden() {
+		for( s in game.splits )
+			if( s.inZone(this) )
+				return true;
+		return false;
+	}
+
 	public function wakeUp() {
 	}
 
@@ -83,6 +90,10 @@ class Entity {
 			}
 			return false;
 		});
+	}
+
+	public function canTurn() {
+		return false;
 	}
 
 	public function canPush() {

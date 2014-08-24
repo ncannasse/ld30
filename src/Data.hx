@@ -20,6 +20,7 @@ enum MobKind {
 	Orange;	// appear
 	Bomb;	// explode
 	Dark; 	// pink all worlds
+	Split;
 }
 
 enum IKind {

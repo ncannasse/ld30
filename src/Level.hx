@@ -49,6 +49,10 @@ class Level {
 						case 8: new ent.Mob(Orange, x, y);
 						case 9: new ent.Mob(Bomb, x, y);
 						case 10: new ent.Mob(Dark, x, y);
+						case 11: new ent.Split(x, y, Down);
+						case 12: new ent.Split(x, y, Left);
+						case 13: new ent.Split(x, y, Up);
+						case 14: new ent.Split(x, y, Right);
 						}
 						if( soil[x+y*width] )
 							continue;

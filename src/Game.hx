@@ -34,23 +34,71 @@ class Part extends h2d.SpriteBatch.BatchElement {
 	}
 }
 
+class Render extends h2d.CachedBitmap {
+
+	var time = 0.;
+
+	override function drawRec( ctx : h2d.RenderContext ) {
+		super.drawRec(ctx);
+		var game = Game.inst;
+		if( game.splits.length == 0 ) return;
+		var old = this.colorMatrix;
+
+		time += ctx.elapsedTime;
+
+		var m = h3d.Matrix.I();
+		m.colorHue(60);
+		m.colorSaturation(1.5);
+		colorMatrix = m;
+
+		sinusDeform = new h3d.Vector(time * 4, 100, 0.003);
+
+		var game = Game.inst;
+
+		for( s in game.splits ) {
+			if( Std.int(s.iy / Const.CH) != game.world ) continue;
+			var iy = s.iy % Const.CH;
+			var z = ctx.engine.width == 720 ? 3 : 2;
+			switch( s.dir ) {
+			case Down:
+				ctx.engine.setRenderZone((s.ix * 16 + 8) * z, (iy * 16 + 4) * z, ctx.engine.width, ctx.engine.height);
+			case Left:
+				ctx.engine.setRenderZone(0, (iy * 16 + 4) * z, (s.ix * 16 + 8) * z, ctx.engine.height);
+			case Up:
+				ctx.engine.setRenderZone(0, 0, (s.ix * 16 + 8) * z, (iy * 16 + 4) * z);
+			case Right:
+				ctx.engine.setRenderZone((s.ix * 16 + 8) * z, 0, ctx.engine.width, (iy * 16 + 4) * z);
+			default:
+				throw "TODO";
+			}
+			super.drawRec(ctx);
+		}
+		ctx.engine.setRenderZone();
+		colorMatrix = old;
+		sinusDeform = null;
+	}
+
+}
+
 class Game extends hxd.App {
 
 	public var level : Level;
 	public var entities : Array<ent.Entity>;
 	public var hero : ent.Hero;
-	var cache : h2d.CachedBitmap;
+	var cache : Render;
 	public var root : h2d.Layers;
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 5;
+	public var currentLevel = 0;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
 
 	var parts : h2d.SpriteBatch;
 	var updates : Array < Float -> Bool > ;
+
+	public var splits : Array<ent.Split>;
 
 	public var keys : { left : Bool, right : Bool, up : Bool, down : Bool, action : Bool };
 
@@ -60,7 +108,7 @@ class Game extends hxd.App {
 		updates  = [];
 		s2d.setFixedSize(15 * 16, 12 * 16);
 
-		cache = new h2d.CachedBitmap(s2d.width, s2d.height);
+		cache = new Render(s2d.width, s2d.height);
 		cache.blendMode = None;
 		s2d.add(cache, 0);
 
@@ -181,6 +229,8 @@ class Game extends hxd.App {
 		parts.hasUpdate = true;
 		root.add(parts, Const.LAYER_FX);
 
+		splits = [];
+
 		world = 0;
 		level = new Level(currentLevel);
 
@@ -196,6 +246,7 @@ class Game extends hxd.App {
 			ic.colorKey = 0xFF00FF;
 			hicons.push(ic);
 		}
+
 
 		var t = new h2d.Text(Res.font.toFont(), s2d);
 		t.text = "Floor #" + StringTools.lpad("" + (currentLevel + 1), "0", 2);
@@ -256,14 +307,6 @@ class Game extends hxd.App {
 			m.colorHue(-60);
 			m.colorSaturation(0.2);
 			m.colorContrast(0.4);
-			cache.colorMatrix = m;
-		case 2:
-			var m = h3d.Matrix.I();
-			m.colorHue(180);
-			m.colorSaturation(-0.1);
-			m.colorContrast( -0.6);
-			m.colorBrightness( -0.25);
-			m.colorContrast(0.7);
 			cache.colorMatrix = m;
 		}
 
