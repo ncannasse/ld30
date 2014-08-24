@@ -45,6 +45,13 @@ class Mob extends Entity {
 					}
 					if( e == this || e.dieing || e.isHidden() ) continue;
 					e.die();
+					if( e.kind.match(EInt(Heart)) ) {
+						game.wait(1, function() {
+							if( game.canExit() )
+								for( e in game.entities )
+									e.wakeUp();
+						});
+					}
 				}
 		default:
 		}
@@ -124,7 +131,11 @@ class Mob extends Entity {
 			spr.currentFrame = 1;
 			spr.speed = 0;
 			spr.scaleX = hxd.Rand.hash(ix + (iy%Const.CH)*Const.CW)&1 == 0 ? -1 : 1;
-			spr.onAnimEnd = function() spr.scaleX = -spr.scaleX;
+			spr.onAnimEnd = function() {
+				spr.scaleX = -spr.scaleX;
+				for( e in getSync() )
+					e.spr.scaleX = spr.scaleX;
+			};
 		}
 	}
 

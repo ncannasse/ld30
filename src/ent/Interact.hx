@@ -4,6 +4,7 @@ import Data;
 class Interact extends Entity {
 
 	var ikind : IKind;
+	var lockPush = false;
 
 	public function new(k, x, y) {
 		ikind = k;
@@ -24,7 +25,47 @@ class Interact extends Entity {
 	}
 
 	override function canPush() {
-		return ikind == Npc && game.world > 0;
+		return !lockPush && ikind == Npc && game.world > 0;
+	}
+
+	override function push(dir : hxd.Direction) {
+		var telep = get(ix + dir.x, iy + dir.y);
+		var a = getSync();
+		super.push(dir);
+		for( e in a ) {
+			e.ix += dir.x;
+			e.iy += dir.y;
+			e.spr.x += dir.x * 16;
+			e.spr.y += dir.y * 16;
+
+			for( e2 in game.entities )
+				if( e2 != e && e2.isCollide && e2.ix == e.ix && e2.iy == e.iy ) {
+					e2.remove();
+					break;
+				}
+		}
+
+
+		if( telep != null && telep.kind.match(EInt(Teleport)) ) {
+			for( e in a )
+				e.remove();
+			lockPush = true;
+			game.wait(1, function() {
+				Res.sfx.teleport.play();
+				game.waitUntil(function(dt) {
+					spr.alpha -= 0.1 * dt;
+					if( spr.alpha < 0 ) {
+						var way = iy >= Const.CH ? -1 : 1;
+						iy += Const.CH * way;
+						spr.y += Const.H * way;
+						spr.alpha = 1;
+						lockPush = false;
+						return true;
+					}
+					return false;
+				});
+			});
+		}
 	}
 
 	override function checkHero() {
@@ -99,6 +140,13 @@ class Interact extends Entity {
 			case DoubleSplit:
 				"Killing moobs with fireballs while you're in the Pink World is acting cowardly.
 				#On the other hand it's a lot of fun.";
+			case Princess:
+				"Sorry but the princess is in another castle!
+				#Noooo ! Don't touch me !!!!";
+			case Sacrifice:
+				"Sacrifices are sometimes necessary.
+				#No, I'm not talking about you. I already know you enjoy dying.
+				#Or else, why would you still be trying to reach the top of Jeru's Tower?";
 			default:
 				"TODO:" + game.level.data.id;
 			}
@@ -138,7 +186,9 @@ class Interact extends Entity {
 		var nframes = 4;
 		for( i in 0...nframes ) { var t = g[ikind.getIndex() * 16 + i + 8]; t.dx = -8; t.dy = -16; tl.push(t); }
 		anims = [tl];
-		game.root.add(spr, Const.LAYER_OBJ - 1);
+		var layer = Const.LAYER_OBJ - 1;
+		if( ikind == Npc ) layer++;
+		game.root.add(spr, layer);
 	}
 
 	override function update(dt) {

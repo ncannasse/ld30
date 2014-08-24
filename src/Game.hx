@@ -90,7 +90,7 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 0;
+	public var currentLevel = 20;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
@@ -488,6 +488,7 @@ class Game extends hxd.App {
 	static function main() {
 
 		MUSIC = new flash.media.Sound(new flash.net.URLRequest("music.mp3"));
+		MUSIC.addEventListener(flash.events.IOErrorEvent.IO_ERROR, function(_) {});
 		CHANNEL = MUSIC.play(0,9999999);
 
 		hxd.Res.loader = new hxd.res.Loader(hxd.res.EmbedFileSystem.create(null,{ compressSounds : true }));
