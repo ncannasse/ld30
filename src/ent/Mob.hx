@@ -91,6 +91,7 @@ class Mob extends Entity {
 				e.remove();
 			lockPush = true;
 			game.wait(1, function() {
+				Res.sfx.teleport.play();
 				game.waitUntil(function(dt) {
 					spr.alpha -= 0.1 * dt;
 					if( spr.alpha < 0 ) {
