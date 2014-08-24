@@ -21,3 +21,7 @@ Day 1
 00:00-01:30		title screen
 
 Work Time = 15:45
+
+Day 2
+
+09:30-13:30		more levels, splitters

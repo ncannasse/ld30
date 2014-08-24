@@ -6,6 +6,7 @@ class Mob extends Entity {
 	var mkind : MobKind;
 	var wait : Float = 0.;
 	var lockPush = false;
+	var canFire = false;
 
 	public function new(k, x, y) {
 		mkind = k;
@@ -74,7 +75,15 @@ class Mob extends Entity {
 			e.iy += dir.y;
 			e.spr.x += dir.x * 16;
 			e.spr.y += dir.y * 16;
+
+			for( e2 in game.entities )
+				if( e2 != e && e2.isCollide && e2.ix == e.ix && e2.iy == e.iy ) {
+					e2.remove();
+					break;
+				}
 		}
+
+
 		if( telep != null && telep.kind.match(EInt(Teleport)) ) {
 			for( e in a )
 				e.remove();
@@ -116,6 +125,27 @@ class Mob extends Entity {
 		}
 	}
 
+	override function checkHero() {
+		switch( mkind ) {
+		case Dark if( canFire ):
+			game.hero.lock = true;
+			game.hero.play(4);
+			var px = spr.x, py = spr.y - 8;
+			var d = hxd.Direction.from(game.hero.ix - ix, game.hero.iy - iy);
+			game.waitUntil(function(dt) {
+				px += d.x * dt * 2;
+				py += d.y * dt * 2;
+				game.emitPart(Std.random(3), 1, px + hxd.Math.srand(4), py + hxd.Math.srand(4) - 4, hxd.Math.srand(4), (1 + hxd.Math.random()) * 2.5, 1 + hxd.Math.random() * 2);
+				if( Std.int(px / 16) == game.hero.ix && Std.int(py / 16) == game.hero.iy ) {
+					game.hero.die();
+					return true;
+				}
+				return false;
+			});
+		default:
+		}
+	}
+
 	override function update(dt:Float) {
 		wait -= dt/60;
 		if( wait > 0 ) return;
@@ -146,6 +176,7 @@ class Mob extends Entity {
 			}
 		case Dark:
 			if( !game.canExit() ) spr.speed = 0;
+			canFire = false;
 			if( !game.hero.lock && (game.hero.ix == ix || game.hero.iy == iy) ) {
 				var d = hxd.Direction.from(game.hero.ix - ix, game.hero.iy - iy);
 				var px = ix + d.x, py = iy + d.y;
@@ -163,19 +194,7 @@ class Mob extends Entity {
 					return;
 				}
 
-				game.hero.lock = true;
-				game.hero.play(4);
-				var px = spr.x, py = spr.y - 8;
-				game.waitUntil(function(dt) {
-					px += d.x * dt * 2;
-					py += d.y * dt * 2;
-					game.emitPart(Std.random(3), 1, px + hxd.Math.srand(4), py + hxd.Math.srand(4) - 4, hxd.Math.srand(4), (1 + hxd.Math.random()) * 2.5, 1 + hxd.Math.random() * 2);
-					if( Std.int(px / 16) == game.hero.ix && Std.int(py / 16) == game.hero.iy ) {
-						game.hero.die();
-						return true;
-					}
-					return false;
-				});
+				canFire = true;
 			}
 
 			for( s in game.splits )

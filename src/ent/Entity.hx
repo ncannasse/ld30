@@ -100,6 +100,9 @@ class Entity {
 		return false;
 	}
 
+	public function checkHero() {
+	}
+
 	public function push( dir : hxd.Direction ) {
 		ix += dir.x;
 		iy += dir.y;

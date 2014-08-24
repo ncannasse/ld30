@@ -90,7 +90,7 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 0;
+	public var currentLevel = 11;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
@@ -105,6 +105,11 @@ class Game extends hxd.App {
 
 	override function init() {
 		super.init();
+
+		#if !debug
+		currentLevel = 0;
+		#end
+
 		updates  = [];
 		s2d.setFixedSize(15 * 16, 12 * 16);
 

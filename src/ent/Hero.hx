@@ -176,14 +176,6 @@ class Hero extends Entity {
 			for( e in game.entities )
 				if( e.ix == ix && e.iy == iy && e != this && !lock )
 					switch( e.kind ) {
-					case EInt(Heart):
-						e.remove();
-						for( i in 0...3 ) {
-							var e = get(e.ix, (e.iy % Const.CH) + i * Const.CH);
-							if( e != null && e.kind.match(EInt(Heart)) )
-								e.remove();
-						}
-						game.nextHeart();
 					case EInt(Stairs) if( game.canExit() ):
 						exit();
 						return;
@@ -233,7 +225,8 @@ class Hero extends Entity {
 			else if( pushTime > 10 ) {
 				pushTime = 0;
 				var e = get(ix + dir.x, iy + dir.y);
-				if( e != null && e.canPush() && !collide(ix + dir.x * 2, iy + dir.y * 2) ) {
+				var esub = null;
+				if( e != null && e.canPush() && !collide(ix + dir.x * 2, iy + dir.y * 2) && ((esub = get(ix + dir.x * 2, iy + dir.y * 2)) == null || esub.kind.match(EInt(Teleport))) ) {
 					mx = dir.x;
 					my = dir.y;
 					ix += dir.x;
@@ -288,13 +281,9 @@ class Hero extends Entity {
 				my -= dm;
 			}
 
-			if( mx == 0 && my == 0 ) {
-				for( s in game.splits )
-					if( s.inZone(this) ) {
-						s.moves--;
-						if( s.moves == 0 ) this.die();
-					}
-			}
+			if( mx == 0 && my == 0 )
+				for( e in game.entities )
+					e.checkHero();
 		}
 	}
 

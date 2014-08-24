@@ -52,6 +52,13 @@ class Split extends Mob {
 		}
 	}
 
+	override function checkHero() {
+		if( inZone(game.hero) ) {
+			moves--;
+			if( moves == 0 ) game.hero.die();
+		}
+	}
+
 	override function remove() {
 		super.remove();
 		game.splits.remove(this);

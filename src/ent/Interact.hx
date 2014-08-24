@@ -27,6 +27,19 @@ class Interact extends Entity {
 		return ikind == Npc && game.world > 0;
 	}
 
+	override function checkHero() {
+		switch( ikind ) {
+		case Heart:
+			if( game.hero.ix == ix && game.hero.iy == iy ) {
+				remove();
+				for( e in getSync() )
+					e.remove();
+				game.nextHeart();
+			}
+		default:
+		}
+	}
+
 	override function activate() {
 		switch( ikind ) {
 		case Npc:
@@ -66,6 +79,10 @@ class Interact extends Entity {
 			case DarkOne:
 				"The Dark One is the most dangerous... It can even reach you through Plantustics!
 				#You can be glad that other moobs and hearts will protect you from him.";
+			case MultiPortal:
+				"Conflicts can occur between worlds when two moobs collide.
+				#This is easily handled by the complete destruction of the moob that gets overwritten.
+				#Science is a beautiful thing, don't you think?";
 			case Split:
 				"Splitty moobs creates local Pink Worlds where ennemies cannot reach you.
 				#But Splitty will give you limits on how many steps you can make in Pink Worlds.";
