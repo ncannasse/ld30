@@ -246,6 +246,7 @@ class Game extends hxd.App {
 				old.soundTransform = new flash.media.SoundTransform(volume);
 			};
 			CHANNEL = MUSIC.play(31000, 9999);
+			CHANNEL.soundTransform.volume = old.soundTransform.volume;
 		}
 
 		for( e in entities.copy() )
@@ -447,6 +448,12 @@ class Game extends hxd.App {
 			Res.sfx.piou.play();
 			restart();
 			return;
+		}
+
+		if( K.isPressed("M".code) ) {
+			var s = CHANNEL.soundTransform;
+			s.volume = 1 - s.volume;
+			CHANNEL.soundTransform = s;
 		}
 
 		#if debug
