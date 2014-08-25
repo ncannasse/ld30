@@ -12,6 +12,8 @@ class Interact extends Entity {
 		switch( k ) {
 		case Heart:
 			isCollide = true;
+			game.entities.remove(this);
+			game.entities.unshift(this);
 		case Stairs:
 			spr.visible = false;
 		case Teleport:
