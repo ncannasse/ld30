@@ -138,13 +138,15 @@ class Hero extends Entity {
 
 		if( k.action ) {
 
-			for( e in game.entities )
-				if( e.isCollide && e.ix == ix + dir.x && e.iy == iy + dir.y && e.activate() ) {
-					lock = true;
-					spr.currentFrame = 0;
-					spr.speed = 0;
-					return;
-				}
+			if( mx == 0 && my == 0 ) {
+				for( e in game.entities )
+					if( e.isCollide && e.ix == ix + dir.x && e.iy == iy + dir.y && e.activate() ) {
+						lock = true;
+						spr.currentFrame = 0;
+						spr.speed = 0;
+						return;
+					}
+			}
 
 			switch( pow ) {
 			case Nothing:
