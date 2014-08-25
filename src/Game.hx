@@ -90,10 +90,12 @@ class Game extends hxd.App {
 
 	var hicons : Array<h2d.Bitmap>;
 	public var hearts = 0;
-	public var currentLevel = 20;
+	public var currentLevel = 18;
 	public var world = 0;
 
 	public var curPower : h2d.Anim;
+
+	public var dieCount = 0;
 
 	var parts : h2d.SpriteBatch;
 	var updates : Array < Float -> Bool > ;
@@ -226,6 +228,9 @@ class Game extends hxd.App {
 			return;
 		}
 
+		if( hicons != null )
+			dieCount++;
+
 		if( hicons != null && CHANNEL.position > 31000 ) {
 			// restart sound from start
 			var old = CHANNEL;
@@ -349,6 +354,7 @@ class Game extends hxd.App {
 								e.die();
 								continue;
 							}
+							Res.sfx.firekill.play();
 							hero.die();
 							return true;
 						}

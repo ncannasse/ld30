@@ -179,6 +179,7 @@ class Hero extends Entity {
 					var e = get(ix + dir.x, iy + dir.y);
 					if( e != null && e.canTurn() ) {
 						powers.pop();
+						Res.sfx.splitRot.play();
 						e.dir = hxd.Direction.from( e.dir.y, -e.dir.x);
 					} else
 						Res.sfx.nopowa.play();

@@ -68,9 +68,9 @@ class Title extends hxd.App {
 
 					var end = new h2d.Text(Res.font.toFont(), s2d);
 					end.textAlign = Center;
-					end.text = "Made in 48h for Lumdum Dare 30\nby @ncannasse\nThank you for playing!";
+					end.text = "Congratulations!\n\nmade in 48h for Lumdum Dare 30\nby @ncannasse\nThank you for playing!";
 					end.x = (s2d.width - end.textWidth) >> 1;
-					end.y = 120;
+					end.y = 100;
 					end.dropShadow = { dx : 1, dy : 1, color : 0, alpha : 0.6 };
 
 				}

@@ -16,6 +16,7 @@ class Mob extends Entity {
 
 
 	override function wakeUp() {
+		if( mkind == Pilar ) return;
 		spr.speed = 8;
 		spr.currentFrame = Std.random(spr.frames.length);
 		update(0);

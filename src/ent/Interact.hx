@@ -88,14 +88,14 @@ class Interact extends Entity {
 
 			var text = switch( game.level.data.id ) {
 			case Tuto1:
-				"Hello young Selenite, did you fall from the moon?
+				"Hello young Selenite!\nDid you fall from the moon?
 				#I haven't seen any of your kind for a long time...
 				#If you want to return to your home, you'll have to climb Jeru's Tower.
 				#Get all the hearts to unlock the stairs to the next floor.
 				#Good luck!
 				";
 			case Tuto2:
-				"Hearts will sometimes give you a special powa.
+				"Collecting hearts will give you a special powa.
 				#Don't waste it, or you will not be able to complete the floor.
 				#If you are stuck, use the \"Escape\" magic word to try again.
 				";
@@ -105,50 +105,75 @@ class Interact extends Entity {
 				#Use the Pilar Invocation powa to protect yourself.";
 			case Tuto4:
 				"Jeru's Tower lives at the crossroad of multiple connected worlds.
-				#The Selenites such as you can sometimes open portals between these worlds.
-				#Theses worlds are similar, but different rules apply between them.
+				#The Selenites such as you can open portals between these worlds.
+				#These worlds are similar, but have different rules.
 				";
 			case Pilar:
-				"The Pilar can destroy things in other worlds.";
+				"Did you know that the Pilar can also destroy things in other worlds?";
 			case Boombo:
 				"The Boombo will only explode if you are near and if all the hearts have been taken.
-				#Some moobs can be pushed were you're into the Grey World.";
+				#Some moobs can be pushed when you're into the Grey World.";
 			case PushPink:
-				"Into the Grey World, Pinkies moobs will lose their powas and can be pushed.";
+				"Into the Grey World, Pinkies moobs will lose their fire and can be pushed.";
 			case PowerOrder:
-				"Using your powas in the right order is the first step to reach your goal in life.";
+				"Using your powas in the right order is the first step to have a successful life.
+				#But are you interested in anothing apart climbing Jeru's Tower?";
 			case DarkOne:
 				"The Dark One is the most dangerous... It can even reach you through Plantustics!
-				#You can be glad that other moobs and hearts will protect you from him.";
+				#You can be glad that hearts and other moobs will protect you from him.";
 			case MultiPortal:
 				"Conflicts can occur between worlds when two moobs collide.
 				#This is easily handled by the complete destruction of the moob that gets overwritten.
 				#Science is a beautiful thing, don't you think?";
 			case Split:
 				"Splitty moobs creates local Pink Worlds where ennemies cannot reach you.
-				#But Splitty will give you limits on how many steps you can make in Pink Worlds.";
+				#But Splitty will give you limits on how many steps you can make in Pink Worlds.
+				#That's not very friendly of them actually...";
 			case SplitRot:
 				"Splitty moobs can be rotated when you get the Turn'ing powa.
 				#Dark Ones can't survive inside the Pink World.
 				#I guess that's too much colorful for them...";
 			case PushOld:
-				"Although I hate to tell you that.
-				#There's some other \"things\" that you can push in the Grey World";
+				"Although I hate to tell you that...
+				#There's some other \"things\" that you can push in the Grey World.
+				#I won't tell you more, I have my own pride.";
 			case Telekill:
-				"Did you ever try to push some monsters trough a Portal?
-				#I wonder what could happen with some of them...";
+				"Did you ever try to push some monsters through a Portal?
+				#I wonder if funny things could happen with some of them...";
 			case DoubleSplit:
-				"Killing moobs with fireballs while you're in the Pink World is acting cowardly.
-				#On the other hand it's a lot of fun.";
+				"Killing moobs with fireballs while you're in the Pink World is acting cowardly !!!
+				#On the other hand it's a lot of fun...";
 			case Princess:
 				"Sorry but the princess is in another castle!
+				#....
 				#Noooo ! Don't touch me !!!!";
 			case Sacrifice:
-				"Sacrifices are sometimes necessary.
+				"Sacrifices are sometimes necessary...
 				#No, I'm not talking about you. I already know you enjoy dying.
 				#Or else, why would you still be trying to reach the top of Jeru's Tower?";
-			default:
-				"TODO:" + game.level.data.id;
+			case BombTriangle:
+				"Be careful of the Boombos !
+				#Yes, I know I'm not being very helpful...
+				#I'll do my best next time...";
+			case Pilar3:
+				"You should be able to handle this one by yourself without my help.
+				#At least I hope so...";
+			case PushingAround:
+				"Sorry I don't really feel like talking today...
+				#Yes, I know that's annoying, but I really can't help it.
+				#Please talk to me again, on another floor.
+				#You know I'm still your friend, right?";
+			case MultiFire:
+				"Eh! Don't suprise me this way, I thought it was a Dark One!";
+			case PilarAgain:
+				"Keep going, you're almost at the top of Jeru's Tower!";
+			case ZigZag:
+				"This floor is named \"Zigzag\". I wonder why...";
+			case Casual:
+				"So far you have died " + game.dieCount + " times.
+				#That's pretty impressive, don't you think?";
+			case MultiRotate:
+				"You know, you don't ALWAYS have to use ALL the powas you get!";
 			}
 
 			game.dialog(text, function() {
