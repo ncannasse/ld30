@@ -37,11 +37,23 @@ class Part extends h2d.SpriteBatch.BatchElement {
 class Render extends h2d.CachedBitmap {
 
 	var time = 0.;
+	var sinus : h3d.shader.SinusDeform;
 
-	override function drawRec( ctx : h2d.RenderContext ) {
-		super.drawRec(ctx);
+	public function new(w,h) {
+		super(null,w,h);
+		sinus = addShader(new h3d.shader.SinusDeform());
+		sinus.amplitude = 0;
+		sinus.frequency = 100;
+	}
+
+	override function draw( ctx : h2d.RenderContext ) {
+		super.draw(ctx);
+
 		var game = Game.inst;
 		if( game.splits.length == 0 ) return;
+
+		ctx.flush();
+
 		var old = this.colorMatrix;
 
 		time += ctx.elapsedTime;
@@ -51,7 +63,8 @@ class Render extends h2d.CachedBitmap {
 		m.colorSaturation(1.5);
 		colorMatrix = m;
 
-		sinusDeform = new h3d.Vector(time * 4, 100, 0.003);
+		sinus.time = time * 4;
+		sinus.amplitude = 0.003;
 
 		var game = Game.inst;
 
@@ -71,11 +84,12 @@ class Render extends h2d.CachedBitmap {
 			default:
 				throw "TODO";
 			}
-			super.drawRec(ctx);
+			super.draw(ctx);
+			ctx.flush();
 		}
 		ctx.engine.setRenderZone();
 		colorMatrix = old;
-		sinusDeform = null;
+		sinus.amplitude = 0.;
 	}
 
 }

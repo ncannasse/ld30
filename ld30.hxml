@@ -3,6 +3,6 @@
 -swf-header 720:576:60:FFFFFF
 -swf-version 11.8
 -main Game
--lib h3d
+-lib heaps
 -lib castle
 -dce full

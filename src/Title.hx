@@ -50,7 +50,7 @@ class Title extends hxd.App {
 				hero.y = 27;
 				hero.x = 125;
 				hero.scale(0.5);
-				hero.color = new h3d.Vector(0, 0, 0, 0);
+				hero.color.set(0, 0, 0, 0);
 				hero.colorKey = 0xA4F50D;
 			}
 		}
@@ -116,7 +116,6 @@ class Title extends hxd.App {
 				hero = new h2d.Anim(Res.hero.toTile().sub(0, 32, 5 * 16, 16).split(), 12, s2d);
 				hero.y = s2d.height + 15;
 				hero.scale(0.5);
-				hero.color = new h3d.Vector(1, 1, 1, 1);
 				hero.colorKey = 0xA4F50D;
 				hero.x = 150;
 			}

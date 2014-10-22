@@ -129,11 +129,11 @@ class Hero extends Entity {
 		time += dt;
 		switch( pow ) {
 		case Nothing:
-			spr.color = null;
+			spr.color.set(1,1,1);
 			spr.colorAdd = null;
 		default:
 			var k = 1-Math.abs(Math.sin(time * 0.1)) * 0.5;
-			spr.color = new h3d.Vector(k,k,k,1);
+			spr.color.set(k,k,k);
 		}
 
 		if( k.action ) {
