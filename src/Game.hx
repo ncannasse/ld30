@@ -44,6 +44,7 @@ class Render extends h2d.CachedBitmap {
 		sinus = addShader(new h3d.shader.SinusDeform());
 		sinus.amplitude = 0;
 		sinus.frequency = 100;
+		sinus.speed = 4;
 	}
 
 	override function draw( ctx : h2d.RenderContext ) {
@@ -63,7 +64,6 @@ class Render extends h2d.CachedBitmap {
 		m.colorSaturation(1.5);
 		colorMatrix = m;
 
-		sinus.time = time * 4;
 		sinus.amplitude = 0.003;
 
 		var game = Game.inst;
@@ -215,7 +215,7 @@ class Game extends hxd.App {
 		waitUntil(function(dt) {
 			len += dt;
 			t.text = text.substr(0, Std.int(len));
-			if( len < text.length && !Res.sfx.old.isPlaying() )
+			if( len < text.length && hxd.Res.sfx.old.lastPlay < haxe.Timer.stamp() - 0.1 )
 				Res.sfx.old.play();
 			if( keys.action ) {
 				if( len < text.length )
@@ -518,7 +518,7 @@ class Game extends hxd.App {
 		MUSIC.addEventListener(flash.events.IOErrorEvent.IO_ERROR, function(_) {});
 		CHANNEL = MUSIC.play(0,9999999);
 
-		hxd.Res.loader = new hxd.res.Loader(hxd.res.EmbedFileSystem.create(null,{ compressSounds : true }));
+		hxd.Res.initEmbed({ compressSounds : true });
 		Data.load(Res.data.entry.getBytes().toString());
 		Texts.init();
 		#if debug
