@@ -73,8 +73,8 @@ class Entity {
 		game.waitUntil(function(dt) {
 			time += dt * 0.04;
 			m.identity();
-			m.colorSaturation( Math.max(2-Math.pow(time,3),0) );
-			m.colorBrightness( -time * 0.2 );
+			m.colorSaturation( Math.max(2-Math.pow(time,3),0) - 1 );
+			m.colorLightness( -time * 0.2 );
 
 			var a = -Math.PI / 2 + Math.srand(Math.PI * 0.4);
 			var sp = (10 + Math.random(5));
