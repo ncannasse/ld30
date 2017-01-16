@@ -61,7 +61,7 @@ class Render extends h2d.CachedBitmap {
 
 		var m = h3d.Matrix.I();
 		m.colorHue(60);
-		m.colorSaturation(1.5);
+		m.colorSaturation(0.5);
 		colorMatrix = m;
 
 		sinus.amplitude = 0.003;
@@ -352,7 +352,7 @@ class Game extends hxd.App {
 		case 1:
 			var m = h3d.Matrix.I();
 			m.colorHue(-60);
-			m.colorSaturation(0.2);
+			m.colorSaturation(-0.8);
 			m.colorContrast(0.4);
 			cache.colorMatrix = m;
 		}
